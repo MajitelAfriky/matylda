@@ -8,3 +8,4 @@ Robot je konstruován pro vstupní napětí 6 - 6,5V, vhodný je regulovatelný 
 
 ## OpenTechLab
 [Více o Matyldě](https://robot-matylda.webnode.cz/)
+![Matylda](https://cdn.discordapp.com/attachments/803367807496355861/1180066093184847903/IMG_20231201_093545.jpg?ex=657c1131&is=65699c31&hm=35b5eb36ebc468a995f44434e455a4c443abc6418e279b70b73655ef0da860da&)
