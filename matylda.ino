@@ -29,9 +29,7 @@ int Rbliz;                                                     // Integer pro ul
 long odezva, vzdalenost;                                       // Dlouhá proměná pro hodnoty výpočtu vzdálenosti ultrazvukovým senzorem
 int last;                                                      // Integer pro uložení hodnoty poslední pehrané skladby
 
-
 void setup() { 
-
   // Osmička v piči
   //Rruk.attach(2);
   //Lruk.attach(3);
@@ -44,28 +42,25 @@ void setup() {
   //Hrud.attach(13);
   //Hlava.attach(12);
   
-   
-
   mySoftwareSerial.begin(9600);                                // Nastavení řenosové rychlosti pro zvukový modul
   Serial.begin(19200);                                         // Nastavení řenosové rychlosti pro PC
 
   pinMode(pTrig, OUTPUT);                                      // Nastavení pinů pro ultrazvukový senzor
   pinMode(pEcho, INPUT);
 
-  Serial.println(F("DFRobot DFPlayer Mini Demo"));             // Troubleshoot zvukového modulu
-  Serial.println(F("Initializing DFPlayer ... (May take 3~5 seconds)"));
+  Serial.println(F("Zvukový modul"));             // Troubleshoot zvukového modulu
+  Serial.println(F("Inicializace zvukového modulu ... (Může trvat 3~5 sekund)"));
   if (!myDFPlayer.begin(mySoftwareSerial)) {
-    Serial.println(F("Unable to begin:"));
-    Serial.println(F("1.Please recheck the connection!"));
-    Serial.println(F("2.Please insert the SD card!"));
+    Serial.println(F("Nepodařilo se navázat seriovou komunikaci:"));
+    Serial.println(F("1. Zkontroluj připojení!"));
+    Serial.println(F("2. Vlož SD kartu!"));
     while (true);
   }
- Serial.println(F("DFPlayer Mini online."));
-  }
+  Serial.println(F("DFPlayer Mini online."));
+}
 
 
 void loop() {
-
 digitalWrite(pTrig, LOW);                                      // Proces měření vzdálenosti ultrazvukovým senzorem
 delayMicroseconds(10);
 digitalWrite(pTrig, HIGH);
@@ -82,15 +77,14 @@ vytah = vytah + 1;                                             // Zvětšování
 Serial.print("Vzdalenost je ");                                // Zobrazení hodnoty naměřené ultrazvukovým senzorem
 Serial.print(vzdalenost);
 Serial.println(" cm.");
-myDFPlayer.volume(25);                                          // Nastavení hlasitosti zvukového modulu
+myDFPlayer.volume(10);                                          // Nastavení hlasitosti zvukového modulu
 
-
-
-if (vytah > 25 && vzdalenost > 200 && last != 2) { idle(); }   // Spuštění loopu idle()
+if (vytah > 100 && vzdalenost > 200 && last != 2) { idle(); }  // Spuštění loopu idle()
 if (vzdalenost > 91 && vzdalenost < 200 && x < 5) { bliz(); }  // Spuštění loopu bliz()
 if (vzdalenost< 90 && vzdalenost > 25 && last != 1) { ahoj(); }// Spuštění loopu ahoj()
 if (vzdalenost < 25) { pryc(); }                               // Spuštění loopu pryc()
 if (kunda == 1) { slimak(); } 	                               // Spuštění loopu slimak()
+
 }
 
 void idle() {
@@ -139,54 +133,11 @@ void bliz() {
 
 void ahoj() {
   Serial.println("ahoj");
-  myDFPlayer.playMp3Folder(1);                                // Přehrání zvukové stopy MP3/0001.mp3
-/*
-  Rruk.attach(3);
-  Lruk.attach(2);
-  Hrud.attach(13);
-
-  for (pos = 20; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
-    Lruk.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);                       // waits 15 ms for the servo to reach the position
-  }
-  for (pos = 20; pos <= 90; pos += 1) { // goes from 0 degrees to 180 degrees
-    Rruk.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);                       // waits 15 ms for the servo to reach the position
-  }
-
-  for (pos = 90; pos <= 100; pos += 1) { // goes from 0 degrees to 180 degrees
-    Hrud.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);                       // waits 15 ms for the servo to reach the position
-  }
-  Serial.println("kokot");
-  for (pos = 100; pos >= 80; pos -= 1) { // goes from 180 degrees to 0 degrees
-    Hrud.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);                       // waits 15 ms for the servo to reach the position
-  }
-  for (pos = 80; pos <= 100; pos += 1) { // goes from 0 degrees to 180 degrees
-    Hrud.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);                       // waits 15 ms for the servo to reach the position
-  }
-  for (pos = 100; pos >= 90; pos -= 1) { // goes from 180 degrees to 0 degrees
-    Hrud.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);    
-  }
-  for (pos = 90; pos >= 160; pos -= 1) { // goes from 180 degrees to 0 degrees
-    Lruk.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);    
-  }
-  for (pos = 90; pos >= 20; pos -= 1) { // goes from 180 degrees to 0 degrees
-    Rruk.write(pos);              // tell servo to go to position in variable 'pos'
-    delay(25);    
-  }
-
-  Rruk.detach();
-  Lruk.detach();
-  Hrud.detach();
-*/
+  myDFPlayer.playMp3Folder(1);                                 // Přehrání zvukové stopy MP3/0001.mp3
   delay(3250);
   x = 0;
   vytah = 0;
+
 }
 
 void pryc() {
@@ -195,130 +146,26 @@ void pryc() {
   myDFPlayer.playMp3Folder(Rpryc);                            // Přehrání randomizované skladby ze složky MP3
   Serial.println(Rpryc);
   delay(1250);
-  
   vytah = 0;
+
 }
 
 void slimak() {
   Serial.println("slimak");
   myDFPlayer.playMp3Folder(10);                              // Přehrání  skladby MP3/0010.mp3
   delay(3250);
-  
   vytah = 0;
+
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-// void frnda() {
-//   Rruk.attach(2);
-//   Rram.attach(4);
-//   Rram.write(180);
-// }
-// 
-// 
-// void asdad() {
-//   // hruď
-//   Hrud.attach(10);
-//   for (i = 80; i < 100; i++) {
-//     Hrud.write(i);                     
-//     delay(30);                      
-//   }
-//   for (i = 100; i > 80; i--) {
-//     Hrud.write(i);
-//     delay(30);
-//   }
-// }
-
-
 /*
-void loop() {
-  Lram.write(80);
-  Rram.write(95);
-val = digitalRead(7);
-if (val == HIGH) {
-    Serial.println("cs");
-    for (i = 20; i < 40; i++) { // L ruka
-      Lruk.write(i);                     
-      delay(25);                      
-    }
-    for (i = 40; i > 20; i--) { // L ruka
-      Lruk.write(i);
-      delay(25);
-    }
-    for (i = 160; i > 140; i--) { // R ruka
-      Rruk.write(i);
-      delay(25);
-    }
-    for (i = 140; i < 160; i++) { // R ruka
-      Rruk.write(i);                     
-      delay(25);                      
-    }
-}
-*/
-
-
-
-
-
-
-
-// pohyby
-
-/*
-  for (i = 20; i < 40; i++) { // L ruka
-      Lruk.write(i);                     
-      delay(25);                      
-  }
-  delay(100);
-
-  for (i = 20; i < 40; i++) { // L rameno
+  for (i = 20; i < 40; i++) {
       Lram.write(i);                     
       delay(25);                      
   }
   delay(100);
-  for (i = 170; i > 150; i--) { // R ruka
+  for (i = 170; i > 150; i--) {
     Rruk.write(i);
     delay(25);
   }
-  for (i = 150; i > 130; i--) { // R rameno
-    Rram.write(i);
-    delay(25);
-  }
-  delay(100);
-  //------------------------------------------ jeden pohyb
-  //------------------------------------------ druhej pohyb
-  for (i = 40; i > 20; i--) { // L ruka
-    Lruk.write(i);
-    delay(25);
-  }
-  delay(100);
-  for (i = 40; i > 20; i--) { // L rameno
-      Lram.write(i);                     
-      delay(25);                      
-  }
-  delay(100);
-  for (i = 150; i < 170; i++) { // R ruka
-      Rruk.write(i);                     
-      delay(25);                      
-  }
-  delay(100);
-  for (i = 130; i < 150; i++) { // R rameno
-    Rram.write(i);
-    delay(25);
-  }
-  delay(100);
-  */
-
-
-
+*/
