@@ -87,7 +87,7 @@ Serial.print(vzdalenost);
 Serial.println(" cm.");
 myDFPlayer.volume(25);                                          // Nastavení hlasitosti zvukového modulu
 
-//if (vytah > 100 && vzdalenost > 200 && last != 2) { idle(); }  // Spuštění loopu idle()
+if (vytah > 100 && vzdalenost > 200 && last != 2) { idle(); }  // Spuštění loopu idle()
 if (vzdalenost > 91 && vzdalenost < 170 && x < 5) { bliz(); }  // Spuštění loopu bliz()
 if (vzdalenost< 90 && vzdalenost > 25 && last /* != 1 */) { ahoj(); }// Spuštění loopu ahoj()
 if (vzdalenost < 25) { pryc(); }                               // Spuštění loopu pryc()
