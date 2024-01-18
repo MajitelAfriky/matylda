@@ -12,11 +12,9 @@ Servo Rram;
 Servo Rnoh;
 Servo Rkyc;
 Servo Rkol;
-Servo g;
 Servo Lram;
 Servo Hrud;
 Servo Hlava;
-Servo k;
 
 int i = 0;                                                     // Integer pro proměný úhel serv
 int pTrig = 40;                                                // Integer trigger pinu pro ultazvukový senzor
@@ -29,8 +27,18 @@ int Rbliz;                                                     // Integer pro ul
 long odezva, vzdalenost;                                       // Dlouhá proměná pro hodnoty výpočtu vzdálenosti ultrazvukovým senzorem
 int last;                                                      // Integer pro uložení hodnoty poslední pehrané skladby
 
+int HlavaP = 90;                                               // Integery pro defaultní polohu serv
+int RrukP = 160;
+int LrukP = 20;
+int RramP = 90;
+int RnohP = 100;
+int RkycP = 100;
+int RkolP = 90;
+int LramP = 80;
+int HrudP = 90;
+
 void setup() { 
-  // Osmička v piči
+  //Osmička v piči
   //Rruk.attach(2);
   //Lruk.attach(3);
   //Rram.attach(4);
@@ -41,24 +49,24 @@ void setup() {
   //Lram.attach(9);
   //Hrud.attach(13);
   //Hlava.attach(12);
-  
+
+  Rruk.write(160);                                             // Zamezení škubání pravé ruky při startu
   mySoftwareSerial.begin(9600);                                // Nastavení řenosové rychlosti pro zvukový modul
   Serial.begin(19200);                                         // Nastavení řenosové rychlosti pro PC
 
   pinMode(pTrig, OUTPUT);                                      // Nastavení pinů pro ultrazvukový senzor
   pinMode(pEcho, INPUT);
 
-  Serial.println(F("Zvukový modul"));             // Troubleshoot zvukového modulu
+  Serial.println(F("Zvukový modul"));                          // Troubleshoot zvukového modulu
   Serial.println(F("Inicializace zvukového modulu ... (Může trvat 3~5 sekund)"));
   if (!myDFPlayer.begin(mySoftwareSerial)) {
     Serial.println(F("Nepodařilo se navázat seriovou komunikaci:"));
     Serial.println(F("1. Zkontroluj připojení!"));
     Serial.println(F("2. Vlož SD kartu!"));
-    while (true);
+  while (true);
   }
   Serial.println(F("DFPlayer Mini online."));
 }
-
 
 void loop() {
 digitalWrite(pTrig, LOW);                                      // Proces měření vzdálenosti ultrazvukovým senzorem
@@ -77,11 +85,11 @@ vytah = vytah + 1;                                             // Zvětšování
 Serial.print("Vzdalenost je ");                                // Zobrazení hodnoty naměřené ultrazvukovým senzorem
 Serial.print(vzdalenost);
 Serial.println(" cm.");
-myDFPlayer.volume(10);                                          // Nastavení hlasitosti zvukového modulu
+myDFPlayer.volume(25);                                          // Nastavení hlasitosti zvukového modulu
 
-if (vytah > 100 && vzdalenost > 200 && last != 2) { idle(); }  // Spuštění loopu idle()
-if (vzdalenost > 91 && vzdalenost < 200 && x < 5) { bliz(); }  // Spuštění loopu bliz()
-if (vzdalenost< 90 && vzdalenost > 25 && last != 1) { ahoj(); }// Spuštění loopu ahoj()
+//if (vytah > 100 && vzdalenost > 200 && last != 2) { idle(); }  // Spuštění loopu idle()
+if (vzdalenost > 91 && vzdalenost < 170 && x < 5) { bliz(); }  // Spuštění loopu bliz()
+if (vzdalenost< 90 && vzdalenost > 25 && last /* != 1 */) { ahoj(); }// Spuštění loopu ahoj()
 if (vzdalenost < 25) { pryc(); }                               // Spuštění loopu pryc()
 if (kunda == 1) { slimak(); } 	                               // Spuštění loopu slimak()
 
@@ -121,20 +129,37 @@ void bliz() {
     Rruk.write(i);                     
     delay(25);                      
   }
-  delay(2250);
-  vytah = 0;                                                   // Resetování hodnoty pro stupštění loopu idle()
+  delay(900);
+
   Lruk.detach();                                               // Odpojení serva 3 - Levá ruka
   Rruk.detach();                                               // Odpojení serva 2 - Pravá ruka
-  delay(100);
 
   x = x + 1;                                                   // Navýšení omezující hodnoty pro spuštění loopu bliz()
-
+  vytah = 0;                                                   // Resetování hodnoty pro stupštění loopu idle()
 }
 
 void ahoj() {
   Serial.println("ahoj");
   myDFPlayer.playMp3Folder(1);                                 // Přehrání zvukové stopy MP3/0001.mp3
-  delay(3250);
+  Hrud.attach(13);
+
+  for (i = HrudP; i < 100; i++) {                                  // Výpočet postupného pohybu serva, 20° - 40°
+    Hrud.write(i);                     
+    delay(35);                                                 // Prodleva mezi jedním ° serva
+  }
+  
+  for (i = 100; i > 80; i--) {
+    Hrud.write(i);
+    delay(35);
+  }
+
+  for (i = 80; i < HrudP; i++) {                                  // Výpočet postupného pohybu serva, 20° - 40°
+    Hrud.write(i);                     
+    delay(35);                                                 // Prodleva mezi jedním ° serva
+  }
+
+  Hrud.detach(); 
+  delay(10000);
   x = 0;
   vytah = 0;
 
@@ -146,26 +171,65 @@ void pryc() {
   myDFPlayer.playMp3Folder(Rpryc);                            // Přehrání randomizované skladby ze složky MP3
   Serial.println(Rpryc);
   delay(1250);
-  vytah = 0;
 
+  Rkol.attach(7);
+  Rnoh.attach(5);
+
+  for (i = RkolP; i > 40; i--) {
+    Rkol.write(i);
+    delay(15);
+  }
+
+    for (i = RnohP; i > 80; i--) {
+    Rnoh.write(i);
+    delay(15);
+  }
+
+  for (i = 40; i < RkolP; i++) {
+    Rkol.write(i);                     
+    delay(15);                      
+  }
+
+    for (i = 80; i < RnohP; i++) {
+    Rnoh.write(i);
+    delay(15);
+  }
+
+  Rkol.detach();
+  Rnoh.detach();
+
+  vytah = 0;
 }
 
 void slimak() {
   Serial.println("slimak");
-  myDFPlayer.playMp3Folder(10);                              // Přehrání  skladby MP3/0010.mp3
-  delay(3250);
-  vytah = 0;
+  myDFPlayer.playMp3Folder(11);
 
-}
-
-/*
-  for (i = 20; i < 40; i++) {
-      Lram.write(i);                     
-      delay(25);                      
+  Lruk.attach(3);
+  Rruk.attach(2);
+  for (i = 20; i < 100; i++) {
+    Lruk.write(i);                     
+    delay(15);
   }
-  delay(100);
-  for (i = 170; i > 150; i--) {
+  
+  for (i = 100; i > 20; i--) {
+    Lruk.write(i);
+    delay(15);
+  }
+  
+  for (i = 160; i > 70; i--) {
     Rruk.write(i);
-    delay(25);
+    delay(15);
   }
-*/
+  
+  for (i = 70; i < 160; i++) {
+    Rruk.write(i);                     
+    delay(15);                      
+  }
+  delay(20);
+
+  Lruk.detach();
+  Rruk.detach();        
+
+  vytah = 0;
+}
