@@ -19,11 +19,11 @@ Robot je konstruován pro vstupní napětí 6 - 6,5V, vhodný je regulovatelný 
 
 4. DIP přepínač
    * Na hrudi robota se nachází DIP přepínač s deseti kontakty.
-     1. kontakt splouží ke změně hlasitosti (15/20).
-     2. až 7. kontakt je volnej k programování.
-     8. kontakt slouží k vypnutí hudby při neaktivitě.
-     9. kontakt slouží k vypnutí pohybu robota.
-     10. kontakt slouží k celkovému ztlumení robota.
+     * kontakt 1 slouží ke změně hlasitosti (15/20).
+     * kontakt 1 až 7 je volnej k programování.
+     * kontakt 8 slouží k vypnutí hudby při neaktivitě.
+     * kontakt 9 slouží k vypnutí pohybu robota.
+     * kontakt 10 slouží k celkovému ztlumení robota.
     
 5. Dvě 8x8 LED patice na hlavě
    * Tato část funguje separátně na druhém Arduinu. Jsou připraveny dvě verze programu [oci.ino](https://github.com/MajitelAfriky/matylda/blob/main/oci.ino) a [oci_v2.ino](https://github.com/MajitelAfriky/matylda/blob/main/oci_v2.ino).
