@@ -20,7 +20,7 @@ Robot je konstruován pro vstupní napětí 6 - 6,5V, vhodný je regulovatelný 
 4. DIP přepínač
    * Na hrudi robota se nachází DIP přepínač s deseti kontakty.
      * kontakt 1 slouží ke změně hlasitosti (15/20).
-     * kontakt 1 až 7 je volnej k programování.
+     * kontakt 2 až 7 je volnej k programování.
      * kontakt 8 slouží k vypnutí hudby při neaktivitě.
      * kontakt 9 slouží k vypnutí pohybu robota.
      * kontakt 10 slouží k celkovému ztlumení robota.
