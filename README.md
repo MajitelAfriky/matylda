@@ -32,4 +32,4 @@ Robot je konstruován pro vstupní napětí 6 - 6,5V, vhodný je regulovatelný 
 ## Odkazy
 [Více o Matyldě](https://robot-matylda.webnode.cz/)
 
-![Matylda](https://imgur.com/a/SnqBVNw)
+![Matylda](https://i.imgur.com/34xNP4A.jpeg)
